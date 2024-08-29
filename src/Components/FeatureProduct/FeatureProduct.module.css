@@ -1,0 +1,15 @@
+.product:hover{
+    box-shadow: inset;
+    border: 1px solid #3DAE84;
+}
+.product{
+    overflow: hidden;
+}
+.product.btn{
+    transition: transform 1s ,opacity 1s;
+    transform: translateY(100%);
+    opacity: 0;
+}
+.product:hover .btn{
+    opacity: 1;
+}
