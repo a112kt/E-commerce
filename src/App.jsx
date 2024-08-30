@@ -15,8 +15,13 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 import ProductDetails from './Components/ProductsDetails/ProductDetails'
 import { Toaster } from 'react-hot-toast'
-import Address from './Components/Address/Address'
 import Whishlist from './Components/Wishllist/Whishlist'
+import AllOrders from './Components/AllOrders/AllOrders'
+import CheckOut from './Components/CheckOut/CheckOut'
+import ForgetPaa from './Components/ForgetPass/ForgetPaa'
+import ResetPaaword from './Components/ResetPassword/ResetPaaword'
+
+
 
 
 
@@ -35,8 +40,11 @@ export default function hello() {
       {path:"Product",element:<ProtectRoutes><Product/></ProtectRoutes>},
       {path:"Brand",element:<ProtectRoutes><Brand/></ProtectRoutes> },
       {path:"productsdetails/:id",element:<ProtectRoutes><ProductDetails/></ProtectRoutes> },
-      {path:"Address",element:<Address/>},
-      {path:"WishList",element:<Whishlist/>},
+      {path:"allorders",element:<ProtectRoutes><AllOrders/></ProtectRoutes> },
+      {path:"WishList",element:<ProtectRoutes><Whishlist/></ProtectRoutes>},
+      {path:"checkout",element:<ProtectRoutes><CheckOut/></ProtectRoutes>},
+      {path:"forgetpassword",element:<ForgetPaa/>},
+      {path:"resetPassword",element:<ResetPaaword/>},
       {path:"*",element:<Notfound/>}
 
     ]

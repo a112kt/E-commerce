@@ -2,7 +2,7 @@
 import axios from 'axios';
 import { useFormik } from 'formik'
 import React, { useContext, useState } from 'react'
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import * as Yup from 'yup';
 import { TokenContext } from '../../Context/TokenContext';
 
@@ -80,6 +80,8 @@ export default function Login() {
               {formik.errors.password}
             </div> :null}
         </div>
+
+        <Link to="/forgetpassword" className='text-xl font-medium hover:text-green-400 '>Forget your Password?</Link>
         
         <div className="text-end my-5">
           {isloading ? <button type='submit' className='text-white border border-white rounded-lg p-3 px-10 mr-0 bg-green-400'>
@@ -88,6 +90,7 @@ export default function Login() {
         </div>
 
       </form>
+      
     </div>
     </>
   )

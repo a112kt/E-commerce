@@ -2,6 +2,7 @@ import axios from "axios";
 import { useState } from "react";
 import { createContext } from "react";
 import toast from "react-hot-toast";
+import { Navigate } from "react-router-dom";
 
 export let CartContext = createContext()
 
@@ -10,6 +11,10 @@ export let CartContext = createContext()
 export default function CartContextProvider(props){
   const[noOfCartItems,setNoOfCartItems]=  useState(0)
   const[totalPrice,settotalPrice]=  useState(0)
+  const[cartId,setCartId]=  useState(null)
+  
+   
+
   
 
 
@@ -23,7 +28,8 @@ export default function CartContextProvider(props){
             productId 
         },{
             headers}).then((response)=>{
-                console.log(response.data.data.totalCartPrice);
+                console.log(response.data.data._id,"Id");
+                setCartId(response.data.data._id)
                 settotalPrice(response.data.data.totalCartPrice)
                 setNoOfCartItems(response.data.numOfCartItems)
 
@@ -44,6 +50,7 @@ export default function CartContextProvider(props){
             headers
         }).then((response)=>{
             console.log(response);
+            setCartId(response.data.data._id)
             setNoOfCartItems(response.data.numOfCartItems)
             settotalPrice(response.data.data.totalCartPrice)
             return response;
@@ -91,6 +98,7 @@ export default function CartContextProvider(props){
             headers
         }).then((response)=>{
             console.log(response);
+            setCartId(response.data.data._id)
             settotalPrice(response.data.data.totalCartPrice)
             return response;
         }).catch((error)=>{
@@ -100,13 +108,34 @@ export default function CartContextProvider(props){
     }
 
 
+    async function onlinePayment(shippingAddress) {
+        
+        return await axios.post(`https://ecommerce.routemisr.com/api/v1/orders/checkout-session/${cartId}?url=http://localhost:5173`,{
+            shippingAddress 
+        },{
+            headers
+        }).then((response)=>{
+            // console.log(response.data.session.url);
+           
+            window.location.href = response.data.session.url;
+            setNoOfCartItems(0)
+            settotalPrice(0)
+            return response;
+        }).catch((error)=>{
+            // console.log(error);
+            return error
+        })  
+    }
+
+  
 
 
 
 
 
 
-    return <CartContext.Provider value={{clearCart,totalPrice,noOfCartItems, updateCartItem,addProductToCart,getCartProduct,deleteProduct}}>
+
+    return <CartContext.Provider value={{clearCart,onlinePayment,totalPrice,noOfCartItems, updateCartItem,addProductToCart,getCartProduct,deleteProduct}}>
 
 {props.children}
 
