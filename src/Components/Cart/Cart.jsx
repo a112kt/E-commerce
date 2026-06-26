@@ -51,128 +51,126 @@ export default function Cart() {
     getCart();
   },[])
 
- 
- 
+  if (isloading) {
+    return <Loader />
+  }
 
   return (
     <>
-    
-  {cartItems?<div className="relative container mx-auto p-8 overflow-x-auto shadow-md mt-20 sm:rounded-lg">
-  <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-    <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
-      <tr>
-        <th scope="col" className="px-16 py-3">
-          <span className="sr-only">Image</span>
-        </th>
-        <th scope="col" className="px-6 py-3">
-          Product
-        </th>
-        <th scope="col" className="px-6 py-3">
-          Qty
-        </th>
-        <th scope="col" className="px-6 py-3">
-         unit Price
-        </th>
-        <th scope="col" className="px-6 py-3">
-         Total Price
-        </th>
-        <th scope="col" className="px-6 py-3">
-          Action
-        </th>
-      </tr>
-    </thead>
-    <tbody>
-    {cartItems.map((item)=><tr key={item.product.id} className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
-        <td className="p-4">
-          <img src={item.product.imageCover} className="w-16 md:w-32 max-w-full max-h-full" alt="Apple Watch" />
-        </td>
-        <td className="px-6 py-4 font-semibold text-gray-900 dark:text-white">
-          {item.product.title}
-        </td>
-        <td className="px-6 py-4">
-          <div className="flex items-center">
-            <button  
-             onClick={()=>updateProduct(item.product.id, item.count-1)}  
-             className="inline-flex items-center justify-center p-1 me-3 text-sm font-medium h-6 w-6 text-gray-500 bg-white border border-gray-300 rounded-full focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-200 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700" type="button">
-              <span className="sr-only">Quantity button</span>
-              <svg className="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 2">
-                <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M1 1h16" />
-              </svg>
-             
-            </button>
-            <div>
-              <span>{item.count}</span>
+      {cartItems && cartItems.length > 0 ? (
+        <div className="container mx-auto px-4 mt-28 mb-12">
+          <h1 className="text-3xl font-bold text-gray-800 mb-8 border-b pb-4">Shopping Cart</h1>
+          
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            {/* Table Container */}
+            <div className="lg:col-span-2 bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+              <div className="overflow-x-auto">
+                <table className="w-full text-sm text-left text-gray-500">
+                  <thead className="text-xs text-gray-700 uppercase bg-gray-50 border-b border-gray-100">
+                    <tr>
+                      <th scope="col" className="px-6 py-4">Product</th>
+                      <th scope="col" className="px-6 py-4">Quantity</th>
+                      <th scope="col" className="px-6 py-4">Price</th>
+                      <th scope="col" className="px-6 py-4">Total</th>
+                      <th scope="col" className="px-6 py-4 text-right">Action</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-gray-100">
+                    {cartItems.map((item) => (
+                      <tr key={item.product.id} className="hover:bg-gray-50 transition-colors">
+                        <td className="px-6 py-4 flex items-center gap-4 min-w-[250px]">
+                          <img src={item.product.imageCover} className="w-20 h-20 object-cover rounded-lg border" alt={item.product.title} />
+                          <div className="truncate max-w-[150px] md:max-w-[200px]">
+                            <span className="font-semibold text-gray-900 block truncate">{item.product.title}</span>
+                            <span className="text-xs text-gray-400 block mt-1">{item.product.category?.name}</span>
+                          </div>
+                        </td>
+                        <td className="px-6 py-4">
+                          <div className="flex items-center gap-2">
+                            <button  
+                              onClick={() => updateProduct(item.product.id, item.count - 1)}  
+                              className="inline-flex items-center justify-center h-8 w-8 text-gray-500 bg-white border border-gray-200 rounded-lg hover:bg-gray-50 active:bg-gray-100 transition-colors focus:outline-none cursor-pointer disabled:opacity-50"
+                              disabled={item.count <= 1}
+                            >
+                              <i className="fa-solid fa-minus text-xs"></i>
+                            </button>
+                            <span className="w-8 text-center font-semibold text-gray-800">{item.count}</span>
+                            <button
+                              onClick={() => updateProduct(item.product.id, item.count + 1)}  
+                              className="inline-flex items-center justify-center h-8 w-8 text-gray-500 bg-white border border-gray-200 rounded-lg hover:bg-gray-50 active:bg-gray-100 transition-colors focus:outline-none cursor-pointer"
+                            >
+                              <i className="fa-solid fa-plus text-xs"></i>
+                            </button>
+                          </div>
+                        </td>
+                        <td className="px-6 py-4 font-semibold text-gray-700">
+                          {item.price} EGP
+                        </td>
+                        <td className="px-6 py-4 font-semibold text-green-600">
+                          {item.price * item.count} EGP
+                        </td>
+                        <td className="px-6 py-4 text-right">
+                          <button 
+                            onClick={() => deleteItem(item.product.id)}  
+                            className="text-red-500 hover:text-red-700 font-semibold cursor-pointer hover:underline text-sm focus:outline-none"
+                          >
+                            <i className="fa-solid fa-trash-can mr-1"></i> Remove
+                          </button>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
             </div>
-            <button
-             onClick={()=>updateProduct(item.product.id, item.count+1)}  
-             className="inline-flex items-center justify-center h-6 w-6 p-1 ms-3 text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-full focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-200 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700" type="button">
-              <span className="sr-only">Quantity button</span>
-              <svg className="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 18">
-                <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 1v16M1 9h16" />
-              </svg>
-            </button>
+            
+            {/* Order Summary */}
+            <div className="lg:col-span-1">
+              <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 flex flex-col gap-6">
+                <h2 className="text-xl font-bold text-gray-800 border-b pb-4">Order Summary</h2>
+                
+                <div className="flex justify-between items-center text-gray-600">
+                  <span>Total Items</span>
+                  <span className="font-semibold text-gray-800">{noOfCartItems}</span>
+                </div>
+                
+                <div className="flex justify-between items-center border-b pb-4">
+                  <span className="text-gray-800 font-medium">Total Price</span>
+                  <span className="text-2xl font-bold text-green-600">{totalPrice} EGP</span>
+                </div>
+                
+                <div className="flex flex-col gap-3">
+                  <Link 
+                    to="/checkout" 
+                    className="w-full text-center bg-blue-600 hover:bg-blue-700 active:bg-blue-800 text-white font-semibold py-3 rounded-xl shadow-md transition-all duration-200"
+                  >
+                    Proceed to Checkout
+                  </Link>
+                  <button 
+                    onClick={() => clearCartItem()} 
+                    className="w-full border border-red-200 hover:bg-red-50 text-red-600 font-medium py-3 rounded-xl transition-all duration-200 cursor-pointer"
+                  >
+                    Clear Shopping Cart
+                  </button>
+                </div>
+              </div>
+            </div>
           </div>
-        </td>
-        <td className="px-6 py-4 font-semibold text-gray-900 dark:text-white">
-         {item.price} EGP
-        </td>
-        <td className="px-6 py-4 font-semibold text-gray-900 dark:text-white">
-        {item.price * item.count} EGP
-        </td>
-        <td className="px-6 py-4">
-          <a onClick={()=>deleteItem(item.product.id)}  className="font-medium text-red-600 dark:text-red-500 hover:underline">Remove</a>
-        </td>
-      </tr>)}
-      <tr>
-        <th className="text-gray-800 text-2xl">
-         Total Price:
-        </th>
-        <th  className="p-4 text-gray-800 text-2xl">
-        {totalPrice} EGP
-        </th>
-        
- 
-      
-       <div className="text-center mx-10">
-      <button onClick={()=>clearCartItem()} className='text-black px-10 py-3 border text-xl border-green-300 rounded-md mt-20'>Clear your Cart</button>
-    </div> 
-
-    <div className="text-center mx-10 mt-20 text-2xl text-black ">
-        <h2>number of items: {noOfCartItems}</h2>
-      </div>    
-    <div className="text-center mt-10 ">
-      <Link to={"/checkout"} className='px-4 border-2 py-2 text-2xl text-white bg-blue-600 shadow-blue-600'>Check Out</Link>
-     
-{/* <button id="dropdownDefaultButton" data-dropdown-toggle="dropdown" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" type="button">Check Out<svg class="w-2.5 h-2.5 ms-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
-<path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
-</svg>
-</button>
-
-
-<div id="dropdown" class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700">
-    <ul class="py-2 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownDefaultButton">
-      <li>
-        <Link to={"/checkout"} state={{type:"Online Payment"}} class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white text-black text-xl">Online Pay</Link>
-      </li>
-      <li>
-        <Link to={"/checkout"} state={{type:"Cash Payment"}} class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white text-black text-xl">Cash Pay</Link>
-      </li>
-    </ul>
-</div>
-  */}
-    </div> 
-
-      </tr>
-      
-    </tbody>
-  </table>
-</div>:<div className='mx-auto px-10 mt-40 text-3xl font-medium'>
-  <div className="p-10 bg-gray-300 py-2"><h2 className='py-4'>Cart Shop</h2>
-  <p className='py-4'>your cart is empty</p></div>
-</div>
-}
-
-  
-    </> 
+        </div>
+      ) : (
+        <div className="container mx-auto px-4 mt-28 mb-12">
+          <div className="max-w-md mx-auto text-center bg-white p-8 rounded-2xl shadow-sm border border-gray-100">
+            <div className="w-20 h-20 bg-gray-50 rounded-full flex items-center justify-center mx-auto mb-6">
+              <i className="fa-solid fa-cart-shopping text-4xl text-gray-300"></i>
+            </div>
+            <h2 className="text-2xl font-bold text-gray-800 mb-2">Your Cart is Empty</h2>
+            <p className="text-gray-500 mb-6">Looks like you haven't added anything to your cart yet.</p>
+            <Link to="/" className="inline-block bg-green-500 hover:bg-green-600 text-white font-semibold px-6 py-3 rounded-xl transition-all duration-200 shadow-sm">
+              Start Shopping
+            </Link>
+          </div>
+        </div>
+      )}
+    </>
   )
 }

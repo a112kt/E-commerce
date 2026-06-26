@@ -43,11 +43,13 @@ useEffect(()=>{
   <ul className="flex flex-col font-medium p-4 md:p-0 mt-4 border border-gray-100 rounded-lg bg-gray-50 md:space-x-8 rtl:space-x-reverse md:flex-row md:mt-0 md:border-0 md:bg-white dark:bg-gray-800 md:dark:bg-gray-900 dark:border-gray-700">
     {token?
     <>
-     <li className='relative'>    
-    <i className="fa-solid fa-cart-shopping text-4xl text-gray-500"></i>
-    <span className="absolute left-6 top-0 bg-green-100 text-green-800 text-xs font-medium me-2 px-2 py-0.5 rounded-full dark:bg-green-900 dark:text-green-300">
-      {noOfCartItems}
-    </span>
+     <li>    
+      <Link to="/Cart" className="relative cursor-pointer block p-1">
+        <i className="fa-solid fa-cart-shopping text-4xl text-gray-500 hover:text-green-500 transition-colors"></i>
+        <span className="absolute left-7 top-0 bg-green-100 text-green-800 text-xs font-semibold px-2 py-0.5 rounded-full dark:bg-green-900 dark:text-green-300">
+          {noOfCartItems}
+        </span>
+      </Link>
   </li> 
    
     <li>    
@@ -71,7 +73,7 @@ useEffect(()=>{
     
       <button data-collapse-toggle="navbar-cta" type="button" className="inline-flex items-center p-2 w-10 h-10 justify-center text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600" aria-controls="navbar-cta" aria-expanded="false">
         <span className="sr-only">Open main menu</span>
-        <svg className="w-5 h-5" ariahidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 17 14">
+        <svg className="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 17 14">
             <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M1 1h15M1 7h15M1 13h15"/>
         </svg>
     </button>
